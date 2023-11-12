@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,9 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("LinkedList Class Test")
 public class LinkedListTest {
     private LinkedList linkedList;
+    private final PrintStream standardOut = System.out;
+    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
     @BeforeEach
     void setUp() {
+        System.setOut(new PrintStream(outputStreamCaptor));
         linkedList = new LinkedList(0);
     }
 
@@ -76,5 +81,13 @@ public class LinkedListTest {
         linkedList.prepend(3);
         assertEquals(3, linkedList.getHead().getValue());
         assertEquals(3, linkedList.getLength());
+    }
+
+    @Test
+    @DisplayName("Return how many times a list is show")
+    public void whenCreatALinkedList_ThenReturnHomeManyTimesAListIsShow() {
+        linkedList.printList();
+        assertEquals("0", outputStreamCaptor.toString()
+                .trim());
     }
 }

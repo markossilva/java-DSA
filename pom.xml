@@ -13,7 +13,7 @@
         <findbugs-plugin.version>3.0.5</findbugs-plugin.version>
         <jacoco.version>0.8.11</jacoco.version>
         <junit.version>5.9.2</junit.version>
-        <minimum.coverage>0.9</minimum.coverage>
+        <minimum.coverage>1.0</minimum.coverage>
     </properties>
 
     <dependencies>
