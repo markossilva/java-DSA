@@ -1,5 +1,6 @@
 package br.com.mks.dsa.linkedlist;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,8 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("LinkedList Class Test")
 public class LinkedListTest {
@@ -21,6 +21,11 @@ public class LinkedListTest {
     void setUp() {
         System.setOut(new PrintStream(outputStreamCaptor));
         linkedList = new LinkedList(0);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        System.setOut(standardOut);
     }
 
     @Test
@@ -41,6 +46,8 @@ public class LinkedListTest {
     @Test
     @DisplayName("Test with initialize linked list, removing the last item")
     public void whenCreateALinkedList_ThenRemoveTheLastItemAndHeadAndTailMustBeNull() {
+        assertEquals(1, linkedList.getLength());
+
         final var removedLast = linkedList.removeLast();
         assertEquals(0, removedLast);
 
@@ -52,6 +59,7 @@ public class LinkedListTest {
         linkedList.append(2);
         linkedList.append(3);
         assertEquals(3, linkedList.removeLast());
+        assertTrue(Objects.isNull(linkedList.getTail().getNext()));
 
         linkedList = new LinkedList();
         final var removedLastWithEmptyList = linkedList.removeLast();
@@ -74,6 +82,7 @@ public class LinkedListTest {
 
         linkedList.prepend(2);
 
+        assertTrue(Objects.nonNull(linkedList.getHead().getNext()));
         assertEquals(2, linkedList.getHead().getValue());
         assertEquals(1, linkedList.getTail().getValue());
         assertEquals(2, linkedList.getLength());

@@ -10,10 +10,18 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <checkstyle-maven-plugin.version>3.3.1</checkstyle-maven-plugin.version>
-        <findbugs-plugin.version>3.0.5</findbugs-plugin.version>
+        <puppycrawl-checkstyle.version>10.12.4</puppycrawl-checkstyle.version>
+        <spotbugs-maven-plugin.version>4.8.1.0</spotbugs-maven-plugin.version>
+        <spotbugs.version>4.8.1</spotbugs.version>
         <jacoco.version>0.8.11</jacoco.version>
         <junit.version>5.9.2</junit.version>
         <minimum.coverage>1.0</minimum.coverage>
+        <pitest.version>1.15.3</pitest.version>
+        <pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
+        <maven-compiler-plugin.verion>3.11.0</maven-compiler-plugin.verion>
+        <maven-resources-plugin.verion>3.3.1</maven-resources-plugin.verion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <dependencies>
@@ -22,6 +30,13 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-parent</artifactId>
+            <version>${pitest.version}</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
 
@@ -34,6 +49,13 @@
                 <configuration>
                     <configLocation>checkstyle.xml</configLocation>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${puppycrawl-checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <goals>
@@ -43,16 +65,23 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>${findbugs-plugin.version}</version>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs-maven-plugin.version}</version>
+                <dependencies>
+                    <!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
+                    <dependency>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs</artifactId>
+                        <version>${spotbugs.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0</version>
             </plugin>
-
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -91,6 +120,39 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>${pitest.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>${pitest-junit5-plugin.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>mutationCoverage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.verion}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.verion}</version>
             </plugin>
         </plugins>
     </build>
